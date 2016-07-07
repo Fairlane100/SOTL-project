@@ -6,6 +6,8 @@ library(httr)
 library(rjson)
 source("preprocessUtils.R")
 
+set_config(use_proxy(url="proxy.useastgw.xerox.com",port=8000))
+
 # Log in and validate.  
 # For this to authenticate properly, you must have your default browser open.
 # A page will come up and ask you to authorize...  Right now it is using Fritz's 
@@ -13,8 +15,9 @@ source("preprocessUtils.R")
 mendeley <- oauth_endpoint(base_url = 'https://api.mendeley.com/oauth', 
                            authorize = 'authorize', access = 'token')
 myapp <- oauth_app(appname = 'funWithSOTL', key = "2363", secret = "j3zBZPNaHRMMtox1")
-token <- oauth2.0_token(mendeley, myapp, scope='all',cache=TRUE)
-profile_rsp <- GET('https://api.mendeley.com/profiles/me', config(token = token))
+token <- oauth2.0_token(mendeley, myapp, scope='all',cache=FALSE)
+profile_rsp <- GET('https://api.mendeley.com/profiles/me', config(token = token),
+                   use_proxy(url="proxy.useastgw.xerox.com",port=8000))
 profile <- fromJSON(rawToChar(content(profile_rsp)))
 message(paste('Hello, ', profile$display_name, '!', sep=''))
 yn <- readline('Did you see the proper Hello message? (y,n)')
@@ -46,9 +49,22 @@ while(is.nextLink(documents$headers$link)) {
     print(paste("retriving page",counter))
     theUrl <- getUrlFromLink(documents$headers$link)
     documents <- GET(theUrl, config(token = token))
-    docListList[[counter]] <- fromJSON(rawToChar(content(documents)))
+    decodedDocs <- fromJSON(rawToChar(content(documents)))
+    docListList[[counter]] <- decodedDocs
 }
 
 docList <- unlist(docListList, recursive = FALSE)
 docList.df <- doclistToDataframe(docList)
-write.csv(docList.df,file = "documentMetaData.csv")
+# find list of all journals covered in src
+unique(tolower(docList.df$src))
+Journals <- c("the international journal of management education",
+              "journal of accounting education",
+              "journal of business ethics education",
+              "journal of economic education",
+              "journal of education for business",
+              "journal of entrepreneurship education")
+
+docSubSet.df <- docList.df[tolower(docList.df$src) %in% Journals,]
+docSubSet.df <- docSubSet.df[-which(is.na(docSubSet.df$abstract)),]
+docSubSet.df <- docSubSet.df[-which(docSubSet.df$abstract == "[no abstract]"),]
+write.csv(docSubSet.df,file = "documentMetaDataJustSelectedJournals.csv")
