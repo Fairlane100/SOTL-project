@@ -1,6 +1,62 @@
 # utilities to support the SOTL processing
 # SOTLutils.R
  
+
+newchartr <- function(old,charvec) {
+    n <- 1
+    print(old)
+    for (i in tolower(substring(old,seq(1,nchar(old),n),seq(n,nchar(old),n)))) {
+        print(i)
+        charvec <- gsub(i," ",charvec)
+    }
+}
+
+performCleaning <- function(infile,stopfile,equivfile,termConcatfile) {
+    infileNoExtension <- sub(".csv","",infile)
+    outfile <- paste(infileNoExtension,"CLEANED.csv")
+    outfileReduced <- paste(infileNoExtension, "CLEANED_CULLED.csv")
+    
+    orig <- read.csv(infile,
+                     stringsAsFactors = FALSE)
+    SOTLstopwords <- read.csv(stopfile, 
+                              stringsAsFactors = FALSE, header = F)$V1
+    SOTLequivalentWords <- read.csv(equivfile, 
+                                    stringsAsFactors = FALSE, header = F)
+    SOTLPhrasesTerms <- read.csv(termConcatfile, 
+                                 stringsAsFactors = FALSE, header = F)
+    # defaulted to data.frame.  needs to be in vector form.
+    SOTLPhrasesTerms <- as.vector(as.matrix(SOTLPhrasesTerms))
+    # keep the original for comparison
+    c <- orig
+    # Clean the abstract data before processing
+    c$abstract <- cleanText(c$abstract, 
+                            SOTLstopwords, 
+                            SOTLequivalentWords,
+                            SOTLPhrasesTerms)
+    # do not know why, but must do this stuff outside of a function or doesnt work.
+    #d$abstract <- cleanText2(c$abstract)
+    #old1 <- "òäó_„Žîñõð"
+    #print(old1)
+    #c$abstract <- newchartr(old1,c$abstract)
+    # give up on custom code. iconv works well.
+    c$abstract <- iconv(c$abstract, "UTF-8", "UTF-8",sub=' ')
+    # remove short words
+    c$abstract <- rm_nchar_words(c$abstract, "1,2")
+    
+    write.csv(c,file=outfile,row.names = FALSE)
+    
+    # remove abstracts which are < 8 words (including empty ones)
+    # DONT do this here because want same rows as input.
+    rowsToRemove <- getBadRows(c$abstract, 8)
+    c <- c[-rowsToRemove,]
+    
+    # word count statistics of remaining abstracts
+    abstractWords <- unlist(lapply(strsplit(c$abstract, "\\s+"), length))
+    summary(abstractWords)
+    
+    write.csv(c,file=outfileReduced,row.names = FALSE)
+}
+
 cleanText <- function(txtVec, stops, equivwords, concatTerms) {
     tmpVec <- txtVec
     
