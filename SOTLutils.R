@@ -12,7 +12,10 @@ cleanText <- function(txtVec, stops, equivwords, concatTerms) {
     concatTerms <- tolower(concatTerms)
     # remove URLs
     tmpVec <- gsub('(f|ht)tp\\S+\\s*', "", tmpVec)
-
+    # remove funky chars that gsub doesnt seem to be able to deal with
+    old1 <- "äó_„ŽñîÑñîñ"
+    new1 <- paste(rep(" ",nchar(old1)),collapse = "")
+    tmpVec <- chartr(old1,new1,tmpVec)
     # remove punctuation
     tmpVec <- gsub("[^[:alnum:][:space:]]", " ", tmpVec)
     # remove numbers
@@ -41,7 +44,8 @@ cleanText <- function(txtVec, stops, equivwords, concatTerms) {
         #print(paste("repl",patt,"with",""))
         tmpVec <-gsub(patt, cpat, tmpVec)
     }
-    
+    # remove short words
+    tmpVec <- rm_nchar_words(tmpVec, "1,2")
     # Remove numbers
     tmpVec <- removeNumbers(tmpVec)
     # Remove punct
