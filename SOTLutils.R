@@ -1,15 +1,18 @@
 # utilities to support the SOTL processing
 # SOTLutils.R
  
-
-newchartr <- function(old,charvec) {
-    n <- 1
-    print(old)
-    for (i in tolower(substring(old,seq(1,nchar(old),n),seq(n,nchar(old),n)))) {
-        print(i)
-        charvec <- gsub(i," ",charvec)
-    }
-}
+# none of the char replacement code works.
+# Seems because the special chars appear to magically change
+# to other special chars when within a function or called.
+# something to do with char encoding, but not sure what.
+# newchartr <- function(old,charvec) {
+#     n <- 1
+#     print(old)
+#     for (i in tolower(substring(old,seq(1,nchar(old),n),seq(n,nchar(old),n)))) {
+#         print(i)
+#         charvec <- gsub(i," ",charvec)
+#     }
+# }
 
 performCleaning <- function(infile,stopfile,equivfile,termConcatfile) {
     infileNoExtension <- sub(".csv","",infile)
