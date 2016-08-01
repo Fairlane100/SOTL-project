@@ -5,7 +5,8 @@
 str(word.freqs)
 str(termfreqs)
 sorted.wordfreqs.termfreq <- word.freqs[order(-word.freqs$term.freq), ]
-write.csv (sorted.wordfreqs.termfreq, file ="sorted.wordfreqs.termfreq",)
+write.csv (sorted.wordfreqs.termfreq, file ="sorted.wordfreqs.termfreq.csv",)
 
-sorted.wordfreqs.termfreq <- word.freqs[order(-word.freqs$doc.freq), ]
-write.csv (sorted.wordfreqs.termfreq, file ="sorted.wordfreqs.docfreq.csv",)
+sorted.wordfreqs.docfreq <- word.freqs[order(-word.freqs$doc.freq), ]
+write.csv (sorted.wordfreqs.docfreq, file ="sorted.wordfreqs.docfreq.csv",)
+# both these csv files are available in GitHub-->SOTL project folder
