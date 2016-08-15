@@ -1,6 +1,7 @@
 # utilities to support the SOTL processing
 # SOTLutils.R
  
+library(tm)
 # none of the char replacement code works.
 # Seems because the special chars appear to magically change
 # to other special chars when within a function or called.
