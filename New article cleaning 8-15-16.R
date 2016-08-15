@@ -1,4 +1,4 @@
-setwd("~/Documents/Research Projects/Git Code/SOTL-project")
+#setwd("~/Documents/Research Projects/Git Code/SOTL-project")
 newset <- read.csv("Missing compiled cleaned 8-15-16.csv", 
                  stringsAsFactors = FALSE)
 
@@ -34,8 +34,8 @@ c$abstract <- iconv(c$abstract, "UTF-8", "UTF-8",sub=' ')
 c$abstract <- rm_nchar_words(c$abstract, "1,2")
 #GOT ERROR BECAUSE I DON'T HAVE THE RM_NCHAR FUNCTION
 #I LOOKED IT UP AND FOUND IT. TRIED TO ADD WITH CALL BELOW, BUT GOT AN ERROR.
-install.packages("rm_nchar_words")
-rm_nchar_words::install_github("qdapRegex/R/rm_nchar_words.R")
+#install.packages("rm_nchar_words")
+#rm_nchar_words::install_github("qdapRegex/R/rm_nchar_words.R")
 
 newwords <- nd$abstract
 words.lower <- tolower(words)  # Still didn't work - I'm stuck.
