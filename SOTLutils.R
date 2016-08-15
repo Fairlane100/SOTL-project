@@ -32,7 +32,7 @@ performCleaning <- function(infile,stopfile,equivfile,termConcatfile) {
     SOTLPhrasesTerms <- as.vector(as.matrix(SOTLPhrasesTerms))
     # keep the original for comparison
     c <- orig
-    c$abstract <- iconv(c$abstract, "UTF-8", "UTF-8",sub=' ')
+    
     # Clean the abstract data before processing
     c$abstract <- cleanText(c$abstract, 
                             SOTLstopwords, 
@@ -65,11 +65,15 @@ performCleaning <- function(infile,stopfile,equivfile,termConcatfile) {
 cleanText <- function(txtVec, stops, equivwords, concatTerms) {
     tmpVec <- txtVec
     
+    #to fix non-ASCII
+    tmpVec <- iconv(tmpVec, "UTF-8", "UTF-8",sub=' ')
     # make all lower case
     tmpVec <- tolower(tmpVec)
     stops <- iconv(stops, "UTF-8", "UTF-8",sub=' ')
     stops <- tolower(stops)
+    equivwords[[1]] <- iconv(equivwords[[1]], "UTF-8", "UTF-8",sub=' ')
     equivwords[[1]] <- tolower(equivwords[[1]])
+    equivwords[[2]] <- iconv(equivwords[[2]], "UTF-8", "UTF-8",sub=' ')
     equivwords[[2]] <- tolower(equivwords[[2]])
     concatTerms <- tolower(concatTerms)
     # remove URLs
