@@ -32,6 +32,7 @@ performCleaning <- function(infile,stopfile,equivfile,termConcatfile) {
     SOTLPhrasesTerms <- as.vector(as.matrix(SOTLPhrasesTerms))
     # keep the original for comparison
     c <- orig
+    c$abstract <- iconv(c$abstract, "UTF-8", "UTF-8",sub=' ')
     # Clean the abstract data before processing
     c$abstract <- cleanText(c$abstract, 
                             SOTLstopwords, 
