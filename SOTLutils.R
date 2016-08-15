@@ -67,9 +67,10 @@ cleanText <- function(txtVec, stops, equivwords, concatTerms) {
     
     # make all lower case
     tmpVec <- tolower(tmpVec)
+    stops <- iconv(stops, "UTF-8", "UTF-8",sub=' ')
     stops <- tolower(stops)
-    SOTLequivalentWords[[1]] <- tolower(SOTLequivalentWords[[1]])
-    SOTLequivalentWords[[2]] <- tolower(SOTLequivalentWords[[2]])
+    equivwords[[1]] <- tolower(equivwords[[1]])
+    equivwords[[2]] <- tolower(equivwords[[2]])
     concatTerms <- tolower(concatTerms)
     # remove URLs
     tmpVec <- gsub('(f|ht)tp\\S+\\s*', "", tmpVec)
