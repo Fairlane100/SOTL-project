@@ -1,6 +1,6 @@
 # utilities to support the SOTL processing
 # SOTLutils.R
- 
+library(qdap)
 library(tm)
 # none of the char replacement code works.
 # Seems because the special chars appear to magically change
