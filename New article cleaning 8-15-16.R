@@ -3,6 +3,7 @@ newset <- read.csv("Missing compiled cleaned 8-15-16.csv",
                  stringsAsFactors = FALSE)
 
 source("SOTLutils.R")
+library(mallet)
 
 infile <- "Missing compiled cleaned 8-15-16.csv"
 stopfile <- "SOTL-stoplist.csv"
@@ -10,49 +11,21 @@ equivfile <- "SOTL-equivalencies.csv"
 termConcatfile <- "SOTL-termConcat.csv"
 
 performCleaning(infile,stopfile,equivfile,termConcatfile)
-
-newset <- read.csv(infile,
-                 stringsAsFactors = FALSE)
-SOTLstopwords <- read.csv(stopfile, 
-                          stringsAsFactors = FALSE, header = F)$V1
-SOTLequivalentWords <- read.csv(equivfile, 
-                                stringsAsFactors = FALSE, header = F)
-SOTLPhrasesTerms <- read.csv(termConcatfile, 
-                             stringsAsFactors = FALSE, header = F)
-# defaulted to data.frame.  needs to be in vector form.
-SOTLPhrasesTerms <- as.vector(as.matrix(SOTLPhrasesTerms))
-
-c <- newset
-# Clean the abstract data before processing
-c$abstract <- cleanText(c$abstract, 
-                        SOTLstopwords, 
-                        SOTLequivalentWords,
-                        SOTLPhrasesTerms)
-#THIS IS NOT WORKING. GOT ERROR FOR TOLOWER.
-c$abstract <- iconv(c$abstract, "UTF-8", "UTF-8",sub=' ')
-# remove short words
-c$abstract <- rm_nchar_words(c$abstract, "1,2")
-#GOT ERROR BECAUSE I DON'T HAVE THE RM_NCHAR FUNCTION
-#I LOOKED IT UP AND FOUND IT. TRIED TO ADD WITH CALL BELOW, BUT GOT AN ERROR.
-#install.packages("rm_nchar_words")
-#rm_nchar_words::install_github("qdapRegex/R/rm_nchar_words.R")
-
-newwords <- nd$abstract
-words.lower <- tolower(words)  # Still didn't work - I'm stuck.
-#I'm going to continue to get rid of punctuation.
-words.nopunct <- gsub("[^[:alnum:][:space:]']", " ", words)
-                        words.l <- strsplit(words.nopunct, "\\s+")
-                        words.lower <-tolower(words.l)   #Hmm, it worked this time. No error message. 
+newwords <- read.csv("Missing compiled cleaned 8-15-16 CLEANED_CULLED.csv")
+newwordsabstracts <-newwords$abstract
+newwordsabstracts <- iconv(newwordsabstracts, "UTF-8", "UTF-8",sub=' ')
+newwordsabstracts.v <- paste(newwordsabstracts, collapse = " ")  #ADDED THIS##
+newwordsabstracts.l <- strsplit(newwordsabstracts.v, "\\s+")  ## AND THEN RE-RAN THIS
+# SEE JOCKERS PAGE 11 FOR COMMANDS, FOLLOWING CHAPTER.FREQS.T EXAMPLE
                         
-                        # make into list of chr's, was list of array of chr's, where each was one word
-                        chunks.v <- unlist(lapply(words.lower, paste, collapse = " "))
+# make into list of chr's, was list of array of chr's, where each was one word
+                        # LINES 21-23 ARE NOT WORKING AND I CANT FIND ORIGINAL REFERENCE
                         str(ids.v)
                         str(chunks.v)
                         summary(nchar(chunks.v))
                         
-                        library(mallet)
+                        
                         NUMTOPICS = 12
-                        source("SOTLutils.R")
                         mallet.instances <- mallet.import(ids.v, chunks.v,
                         "SOTL-stoplist primary 7-18-16.csv",
                         FALSE,

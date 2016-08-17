@@ -7,14 +7,7 @@ dim(newdata)
 
 # remove rows where abstract is NA
 # note that I already removed the empty abstracts, so this should not make a difference (running as test)
-newdata <- newdata[which(newdata$abstract != ""),]
-dim(newdata)
-nd <- newdata
-# split each abstract into words
-ids.v <- paste(nd$journal,nd$year,nd$Volume.number,nd$Issue,nd$page,sep="_")
-ids.v <- gsub(" ","",ids.v)
-words <- nd$abstract
-words.lower <- tolower(words)
+setwd("~/Documents/Research Projects/Git Code/SOTL-project")
 #getting error on tolower "invalid multibyte string 3"
 #will try to remove foreign characters and see it this helps
 
