@@ -66,7 +66,8 @@ cleanText <- function(txtVec, stops, equivwords, concatTerms) {
     tmpVec <- txtVec
     
     #to fix non-ASCII
-    tmpVec <- iconv(tmpVec, "UTF-8", "UTF-8",sub=' ')
+    tmpVec <- iconv(tmpVec, "UTF-8", "ASCII",sub=' ')
+    #tmpVec <- str_replace_all(tmpVec,"[^[:graph:]]", " ") 
     # make all lower case
     tmpVec <- tolower(tmpVec)
     stops <- iconv(stops, "UTF-8", "UTF-8",sub=' ')
