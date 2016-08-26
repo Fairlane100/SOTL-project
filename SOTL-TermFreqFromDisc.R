@@ -23,22 +23,10 @@ disc.words.m <- as.matrix(dtm)
 disc.words.df <- as.data.frame(disc.words.m)
 
 disc.freqs  <- printFrequentTerms(disc.words.df,5)
-# TRIED TO ADD SOME COMMANDS HERE:
-# I want to see the whole list of disc.freqs in descending order
-# with the item count included
-# I have tried to get the structure of disc.freqs, and it seems to only have the words 
-# (no counts)
-# I also tried to run it without the parameter so that I could get a complete list. 
-# Won't run without the parameter
 
-# Next I tried to sort the list with this command. It didn't work
-# I need the command that calculates frequencies
-sort.disc.freqs <- sort(disc.freqs, decreasing = TRUE)
-
+for (i in 1:length(disc.freqs)) {
+  tmp <- disc.freqs[[i]]
+  tmp <- t(data.frame(tmp[,1:10]))
+  write.csv(tmp, paste("discfreq",i,".csv"))
+}
 write.csv (disc.freqs, file ="sorted.disc.freqs.csv",)
-#This wrote a file that just shows all the words, no frequency counts
-
-disc.freqs.t <- table(disc.words.df)
-# ran this and it never came back with results - did it choke? 
-# did not receive an error message
-# When I did this previously, I used Mallet.

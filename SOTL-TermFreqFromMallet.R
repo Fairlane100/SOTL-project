@@ -30,9 +30,9 @@ write.csv(d, "topicsAndDisciplinesOut.csv")
 
 # the 5 is only for print, the freqs returned contains all words
 topic.freqs <- printFrequentTerms(topic.words.df,5)
-# ADDED HERE - did not work:
-sorted.topic.freqs <- topic.freqs[order(-topic.freqs$doc.freq), ]
-write.csv (sorted.wordfreqs.docfreq, file ="sorted.topic.freqs.csv",)
-#checking the output from topic.freq
-#it's just a long list of words, no counts
-topic.freqs
+
+for (i in 1:length(topic.freqs)) {
+  tmp <- topic.freqs[[i]]
+  tmp <- t(data.frame(tmp[,1:10]))
+  write.csv(tmp, paste("topicfreq",i,".csv"))
+}
