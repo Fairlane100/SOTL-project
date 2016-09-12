@@ -7,7 +7,7 @@ library(mallet)
 # Note: To create input file, run 'SOTL-CreateCleanAbstracts.R' 
 # Make sure you are in the right Folder before sourcing this R file!!
 
-inputFile <- "Combined clean  8-17-16 CLEANED_CULLED.csv"
+inputFile <- "Combined clean  8-25-16 CLEANED_CULLED.csv"
 NUMTOPICS <- 15
 
 CleanInput <- read.csv(inputFile, stringsAsFactors = FALSE)
@@ -33,6 +33,6 @@ topic.freqs <- printFrequentTerms(topic.words.df,5)
 
 for (i in 1:length(topic.freqs)) {
   tmp <- topic.freqs[[i]]
-  tmp <- t(data.frame(tmp[,1:10]))
+  tmp <- t(data.frame(tmp[,1:100]))
   write.csv(tmp, paste("topicfreq",i,".csv"))
 }

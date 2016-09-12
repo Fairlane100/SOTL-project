@@ -7,7 +7,7 @@ source("SOTLutils.R")
 # Note: To create input file, run 'SOTL-CreateCleanAbstracts.R' 
 # Make sure you are in the right Folder before sourcing this R file!!
 
-inputFile <- "Combined clean  8-17-16 CLEANED_CULLED.csv"
+inputFile <- "Combined clean  8-25-16 CLEANED_CULLED.csv"
 
 
 CleanInput <- read.csv(inputFile, stringsAsFactors = FALSE)
@@ -26,7 +26,7 @@ disc.freqs  <- printFrequentTerms(disc.words.df,5)
 
 for (i in 1:length(disc.freqs)) {
   tmp <- disc.freqs[[i]]
-  tmp <- t(data.frame(tmp[,1:10]))
+  tmp <- t(data.frame(tmp[,1:200]))
   write.csv(tmp, paste("discfreq",i,".csv"))
 }
 write.csv (disc.freqs, file ="sorted.disc.freqs.csv",)
