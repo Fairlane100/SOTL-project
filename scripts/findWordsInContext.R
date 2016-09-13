@@ -6,14 +6,10 @@ c <- read.csv("Combined clean  8-25-16 CLEANED_CULLED.csv",stringsAsFactors = FA
 # for the given word (THEWORD), find all occurances of the word, 
 #    and print out N (N) words before and after (if they exist)
 
-<<<<<<< HEAD
-THEWORD <- "graphical"
-N <- 5
-=======
+
 THEWORD <- "journal"
 N <- 3
 DISC <- 0 # make DISC <- 0 to match all disciplines
->>>>>>> origin/master
 
 ### mkNlist makes a list of indices to print out.
 mkNlist <- function(inx, support, len) {
