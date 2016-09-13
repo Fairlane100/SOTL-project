@@ -2,7 +2,7 @@
 library(tm)
 library(qdap)
 
-source("SOTLutils.R")
+source("../scripts/SOTLutils.R")
 
 # infile <- "Combined clean  6-13-16.csv"
 infile <- "Combined clean  8-25-16.csv"
