@@ -16,7 +16,8 @@ library(tm)
 # }
 
 performCleaning <- function(infile,stopfile,equivfile,termConcatfile) {
-    infileNoExtension <- sub(".csv","",infile)
+  infile <- "Combined clean  8-25-16.csv" 
+  infileNoExtension <- sub(".csv","",infile)
     outfile <- paste(infileNoExtension,"CLEANED.csv")
     outfileReduced <- paste(infileNoExtension, "CLEANED_CULLED.csv")
     
@@ -47,6 +48,8 @@ performCleaning <- function(infile,stopfile,equivfile,termConcatfile) {
     c$abstract <- iconv(c$abstract, "UTF-8", "UTF-8",sub=' ')
     # remove short words
     c$abstract <- rm_nchar_words(c$abstract, "1,2")
+    # concat 'non' with the word after it and remove the 'non' word
+    c$abstract <- removeNons(c$abstract)
     
     write.csv(c,file=outfile,row.names = FALSE)
     
@@ -60,6 +63,21 @@ performCleaning <- function(infile,stopfile,equivfile,termConcatfile) {
     summary(abstractWords)
     
     write.csv(c,file=outfileReduced,row.names = FALSE)
+}
+
+removeNons <- function(absVec) {
+    tmpVec <- absVec
+    for (i in 1:length(absVec)) {
+        a <- absVec[i]
+        aa <- unlist(strsplit(a," "))
+        nons <- which(aa=="non")
+        if (length(nons) != 0) {
+            aa[nons+1] <- paste0("non",aa[nons+1])
+            aa <- aa[-nons]
+            tmpVec[i] <- paste(aa,collapse=" ")
+        }
+    }
+    tmpVec
 }
 
 cleanText <- function(txtVec, stops, equivwords, concatTerms) {
