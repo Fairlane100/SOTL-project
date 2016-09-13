@@ -6,8 +6,14 @@ c <- read.csv("Combined clean  8-25-16 CLEANED_CULLED.csv",stringsAsFactors = FA
 # for the given word (THEWORD), find all occurances of the word, 
 #    and print out N (N) words before and after (if they exist)
 
+<<<<<<< HEAD
 THEWORD <- "graphical"
 N <- 5
+=======
+THEWORD <- "journal"
+N <- 3
+DISC <- 0 # make DISC <- 0 to match all disciplines
+>>>>>>> origin/master
 
 ### mkNlist makes a list of indices to print out.
 mkNlist <- function(inx, support, len) {
@@ -17,15 +23,23 @@ mkNlist <- function(inx, support, len) {
     s
 }
 ### loops through all abstracts, finds the word, prints the +-N words around it.
+resultDf <- NULL
 for (i in 1:length(c$abstract)) {
     a <- c$abstract[i]
+    d <- c$Disc[i]
     aa <- unlist(strsplit(a," "))
-    matches <- grep(THEWORD,aa)
-    if (length(matches) > 0) {
-        print(paste("Abstract",i))
+    tmpword <- paste0("\\b",THEWORD,"\\b")
+    matches <- NULL
+    if (DISC == 0 || d == DISC) {
+        matches <- grep(tmpword,aa)
     }
     for (match in matches) {
         string <- paste(aa[mkNlist(match, N, length(aa))],collapse = " ")
-        print(string)
+        resultDf <- rbind(resultDf, data.frame(i,d,string))
+        #print(string)
     }
+}
+if (!is.null(resultDf)){
+    colnames(resultDf) <- c("Abstract","Disc","Match")
+    write.csv(resultDf,paste0("wordsInContextResult_Word_",THEWORD,"_Context_",N,"_Discipline_",DISC,".csv"))
 }
