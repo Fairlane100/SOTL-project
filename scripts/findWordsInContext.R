@@ -37,5 +37,5 @@ for (i in 1:length(c$abstract)) {
 }
 if (!is.null(resultDf)){
     colnames(resultDf) <- c("Abstract","Disc","Match")
-    write.csv(resultDf,paste0("../working/wordsInContextResult_Word_",THEWORD,"_Context_",N,"_Discipline_",DISC,".csv"))
+    write.csv(resultDf,paste0("wordsInContextResult_Word_",THEWORD,"_Context_",N,"_Discipline_",DISC,".csv"))
 }
