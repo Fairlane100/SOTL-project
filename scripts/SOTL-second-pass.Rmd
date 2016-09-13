@@ -1,0 +1,100 @@
+---
+title: "SOTL-second pass"
+author: "Ebner"
+date: "May 27, 2016"
+output: pdf_document
+---
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(mallet)
+library(wordcloud)
+library(reshape2)
+library("Matrix")
+#library(SnowballC) stemmer was kind of shitty
+#library(hunspell) stemmer better and worse, ergo, still shitty
+library(tm)
+
+NUMTOPICS <- 11
+```
+The input file is "Combined clean  5-31-16.csv"
+
+  Print Initial dimensions
+  
+  Make all words lower case
+  
+  Remove preliminary stop words
+  
+  Remove extra white space
+
+  Remove rows with empty abstracts (after cleaning)
+  
+  Show dimensions after empty's removal
+  
+  Show summary statistics of word count in remaining abstracts
+
+```{r}
+# read in the whole csv file for processing
+orig <- read.csv("Combined clean  5-31-16.csv", stringsAsFactors = FALSE)
+c <- orig
+
+dim(c) # Rows and Columns in the file
+
+# Clean the abstract data before processing
+# make all lower case
+c$abstract <- tolower(c$abstract)
+# remove punctuation
+c$abstract <- gsub("[^[:alnum:][:space:]]", " ", c$abstract)
+# remove stop words
+c$abstract <- removeWords(c$abstract, stopwords("english"))
+# remove extra white space
+c$abstract <- stripWhitespace(c$abstract)
+# remove leading and trailing spaces
+c$abstract <- gsub("^\\s+|\\s+$", "", c$abstract)
+
+# remove rows where abstract is null
+c <- c[which(c$abstract != ""),]
+
+dim(c) # Rows and Columns after cleaning
+
+statwords <- strsplit(c$abstract, "\\s+")
+chunks.v <- unlist(lapply(statwords, length))
+# Summary statistics of word count in the abstracts
+summary(chunks.v)
+removeRows <- c()
+
+# Take a look at short abstracts
+for (i in 1:20) {
+    w <- which(chunks.v == i)
+    print (i)
+    print(c[w,]$abstract)
+    if (i < 8) {
+        removeRows <- c(removeRows, w)
+    }
+}
+
+# Remove goofy abstracts.
+c <- c[-removeRows,]
+dim(c) # Rows and Columns after short abstract removal
+
+# Now look at stats again.
+statwords <- strsplit(c$abstract, "\\s+")
+chunks.v <- unlist(lapply(statwords, length))
+summary(chunks.v)
+```
+
+Next, look at word frequency of the 11 disciplines
+
+```{r}
+# create a list of 11 word sequences which is words from each of disciplines
+z <- split(c$abstract,c$Disc)
+# treat disciplines as 'document'
+z <- lapply(z, paste, collapse = " ") # dont collapse if want to treat abstracts like docs.
+# make term frequency matrix
+
+corpus <- VCorpus(VectorSource(z))
+dtm <- DocumentTermMatrix(corpus)
+str(dtm)
+dtms <- removeSparseTerms(dtm, 0.4)
+str(dtms)
+```
