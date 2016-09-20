@@ -1,0 +1,9 @@
+name: vis_app
+account: ebner
+server: shinyapps.io
+appId: 126671
+bundleId: 562671
+url: https://ebner.shinyapps.io/vis_app/
+when: 1474380144.90063
+asMultiple: FALSE
+asStatic: FALSE

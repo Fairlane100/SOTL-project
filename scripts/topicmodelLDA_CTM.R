@@ -90,8 +90,13 @@ json_VEM <- topicmodels_json_ldavis(fitted = TM[["VEM"]], corpus = myCorp, doc_t
 json_VEMf <- topicmodels_json_ldavis(fitted = TM[["VEM_fixed"]], corpus = myCorp, doc_term = dtm)
 json_Gib <- topicmodels_json_ldavis(fitted = TM[["Gibbs"]], corpus = myCorp, doc_term = dtm)
 json_CTM <- topicmodels_json_ldavis(fitted = TM[["CTM"]], corpus = myCorp, doc_term = dtm)
+write(json_VEM, "../scripts/vis_app/json_VEM")
+write(json_VEMf, "../scripts/vis_app/json_VEMf")
+write(json_Gib, "../scripts/vis_app/json_Gib")
+write(json_CTM, "../scripts/vis_app/json_CTM")
+
 #serVis(json_VEM)
-serVis(json_VEMf)
+#serVis(json_VEMf)
 #serVis(json_Gib)
 #serVis(json_CTM)
 
