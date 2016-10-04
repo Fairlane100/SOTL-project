@@ -2,6 +2,8 @@
 # SOTLutils.R
 library(qdap)
 library(tm)
+library(mallet)
+
 # none of the char replacement code works.
 # Seems because the special chars appear to magically change
 # to other special chars when within a function or called.
@@ -16,7 +18,6 @@ library(tm)
 # }
 
 performCleaning <- function(infile,stopfile,equivfile,termConcatfile) {
-  infile <- "Combined clean  8-25-16.csv" 
   infileNoExtension <- sub(".csv","",infile)
     outfile <- paste(infileNoExtension,"CLEANED.csv")
     outfileReduced <- paste(infileNoExtension, "CLEANED_CULLED.csv")
@@ -170,14 +171,14 @@ trainTopicModel <- function(df, numtopics) {
     topic.words.notNormed.m <- mallet.topic.words(topic.model,
                                                   smoothed = TRUE,
                                                   normalized = FALSE)
-    topic.words.notNormed.m <- round(topic.words.notNormed.m)
+    #topic.words.notNormed.m <- round(topic.words.notNormed.m) # breaks LDAvis, dont do
     vocabulary <- topic.model$getVocabulary()
     colnames(topic.words.notNormed.m) <- vocabulary
     
     out.df <- as.data.frame(topic.words.notNormed.m)
     doc.topics <- mallet.doc.topics(topic.model, F, T)
-    
-    return(list(out.df,doc.topics))
+    word.freqs <- mallet.word.freqs(topic.model = topic.model)
+    return(list(out.df, doc.topics, word.freqs))
 }
 
 
