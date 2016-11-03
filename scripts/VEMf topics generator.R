@@ -36,13 +36,16 @@ dim(dtm)
 
 k <- 13
 SEED <- 2010
-TM <- VEM_fixed = LDA(dtm, k = k,control = list(estimate.alpha = FALSE, seed = SEED))
-TM("alpha")
+#TM <- VEM_fixed = LDA(dtm, k = k,control = list(estimate.alpha = FALSE, seed = SEED))
+TM <- LDA(dtm, k = k,control = list(estimate.alpha = FALSE, seed = SEED))
+#TM("alpha")
+TM@alpha
 #Terms <- terms(TM[["VEM_fixed"]], 30)
 #Terms[,1:k]
-Terms <- as.data.frame(terms(TM[["VEM_fixed"]], 30))
+#Terms <- as.data.frame(terms(TM[["VEM_fixed"]], 30))
+Terms <- as.data.frame(terms(TM, 30))
 Terms[,1:k]
-write.csv(Terms,"../working/topicterms", k,"topics.csv")
+write.csv(Terms,"../working/topicterms.csv", k)
 # trying to write the file in the working directory
 #write(json_VEMf, "../scripts/vis_app/json_VEMf")
                       
