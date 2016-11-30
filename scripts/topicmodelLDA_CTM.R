@@ -39,9 +39,9 @@ summary(col_sums(dtm))
 dim(dtm)
 #[1] 7448 9250
 library("topicmodels")
-k <- 13
+k <- 50
 SEED <- 2010
-TM <- list(VEM = LDA(dtm, k = k, control = list(seed = SEED)),
+TM <- list(#VEM = LDA(dtm, k = k, control = list(seed = SEED)),
            VEM_fixed = LDA(dtm, k = k,
                         control = list(estimate.alpha = FALSE, seed = SEED)),
            Gibbs = LDA(dtm, k = k, method = "Gibbs",
@@ -117,11 +117,11 @@ json_lda_mallet <- LDAvis::createJSON(phi = phiNorm, theta = theta,
 
 #inspect(myCorp)
 library(servr)
-json_VEM <- topicmodels_json_ldavis(fitted = TM[["VEM"]], corpus = myCorp, doc_term = dtm)
+#json_VEM <- topicmodels_json_ldavis(fitted = TM[["VEM"]], corpus = myCorp, doc_term = dtm)
 json_VEMf <- topicmodels_json_ldavis(fitted = TM[["VEM_fixed"]], corpus = myCorp, doc_term = dtm)
 json_Gib <- topicmodels_json_ldavis(fitted = TM[["Gibbs"]], corpus = myCorp, doc_term = dtm)
 json_CTM <- topicmodels_json_ldavis(fitted = TM[["CTM"]], corpus = myCorp, doc_term = dtm)
-write(json_VEM, "../scripts/vis_app/json_VEM")
+#write(json_VEM, "../scripts/vis_app/json_VEM")
 write(json_VEMf, "../scripts/vis_app/json_VEMf")
 write(json_Gib, "../scripts/vis_app/json_Gib")
 write(json_CTM, "../scripts/vis_app/json_CTM")
@@ -143,7 +143,7 @@ discnodes <- paste0("D",sort(unique(Discs)))
 topicnodes <- paste0("T",sort(unique(TopicsCTM)))
 allnodes <- c(discnodes,topicnodes)
 allnodeswithids <- data.frame(c(1:length(allnodes)),allnodes)
-colnames(allnodeswithids) <- c("id","label")
+#colnames(allnodeswithids) <- c("id","label")
 alledges <- data.frame(source=Discs,target=TopicsCTM+length(discnodes))
 
 library(rgexf)
