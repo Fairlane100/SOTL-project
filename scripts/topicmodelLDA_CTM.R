@@ -94,6 +94,20 @@ myCorp <- VCorpus(VectorSource(dtm2list))
 # NB: there is a reference there also about finding optimal number of topics.
 df$abstract <- dtm2list
 topout <- trainTopicModel(df, k)
+# write out csv of terms for topics
+t1 <- topout[[1]]
+topModelTerms <- data.frame()
+for (i in 1:k) {
+    t <- t1[i,]
+    t2 <- t[order(t,decreasing = TRUE)]
+    ts <- t2[1:10]
+    freq <- as.vector(as.matrix(ts))
+    term <- names(ts)
+    tf <- data.frame(term,freq)
+    tf <- t(tf)
+    topModelTerms <- rbind(topModelTerms,tf)
+}
+topModelTerms <- t(topModelTerms)
 # phi is topic.words as probabilities
 phi <- as.matrix(topout[[1]])
 # term.frequency is vector of word counts of vocab
